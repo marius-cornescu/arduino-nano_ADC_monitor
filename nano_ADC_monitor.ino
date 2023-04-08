@@ -125,7 +125,7 @@ void _readVoltagesOnAnalogPins() {
     voltage[pinId] = round(measured_voltage);
   }
 
-  _publishAnalogPinData();
+  _printAnalogPinData();
 }
 //==================================================================================================
 float _computeVoltage(int raw_analog_value, int unit) {
@@ -143,7 +143,7 @@ float _computeVoltage(int raw_analog_value, int unit) {
 }
 //==================================================================================================
 //==================================================================================================
-void _publishAnalogPinData() {
+void _printAnalogPinData() {
 #ifdef DEBUG_V
   Serial.println("");
   Serial.println("---------------------------------------");

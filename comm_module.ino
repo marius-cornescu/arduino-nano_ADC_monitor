@@ -6,7 +6,7 @@
 //= CONSTANTS ======================================================================================
 //----------------------------------
 bool processReceivedMessage(const char* message);
-const char* prepareMessageToSend();
+void prepareMessageToSend(char* message);
 
 //= VARIABLES ======================================================================================
 RtznCommProtocol commProto("NANO_ADC-WORKER", &processReceivedMessage, &prepareMessageToSend);
@@ -52,26 +52,26 @@ bool processReceivedMessage(const char* message) {
   return haveToPublish;
 }
 //==================================================================================================
-const char* prepareMessageToSend() {
+void prepareMessageToSend(char* message) {
   //commProto.purgeDataLine(2048, true);
 
 #ifdef UseCOMM
-  int CHAR_COUNT = 4;
-  int message_size = (CHAR_COUNT * ANALOG_PIN_COUNT) + 1;  // 33 bytes for 8 pins
-  char* message = new char[message_size];
-  memset(message, 0, message_size);
+  int CHAR_COUNT = 2;
   //Serial.println("");
   for (byte pinId = 0; pinId < ANALOG_PIN_COUNT; pinId++) {
-    char voltage_string[CHAR_COUNT + 1];
-    sprintf(voltage_string, "%04d", voltage_avg[pinId]);
-    //Serial.print(voltage_string); Serial.print(" | ");
-    memcpy(&message[pinId * CHAR_COUNT], voltage_string, CHAR_COUNT);
+    int value = voltage_avg[pinId];
+    byte byte1 = round(value / 100);
+    byte byte2 = (value - (round(value / 100) * 100));
+
+    //Serial.print(byte1);Serial.print(" | ");Serial.println(byte2);
+
+    message[pinId * CHAR_COUNT] = (char)(byte1 + byte('0'));
+    message[pinId * CHAR_COUNT + 1] = (char)(byte2 + byte('0'));
   }
   //Serial.println("");
 #ifdef DEBUG
   Serial.println(message);
 #endif
-  return message;
 #endif
 }
 //==================================================================================================
