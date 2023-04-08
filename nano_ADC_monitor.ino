@@ -12,7 +12,7 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define DEBUG
-//#define UseIoT
+#define UseCOMM
 
 #define SEC 1000  // 1 second
 
@@ -120,7 +120,14 @@ float _computeVoltage(int raw_analog_value) {
   // read correct supply voltage
   float supply_voltage = _readVcc() / 1000.0;
   float corrected_voltage = supply_voltage / OPERATING_VOLTAGE * raw_voltage;
-  return corrected_voltage;
+
+#ifdef DEBUG
+  Serial.print("Vcc = ");
+  Serial.print(supply_voltage);
+  Serial.println(" ");
+#endif
+
+  return (raw_analog_value * _readVcc()) / 1023000.0;
 }
 //==================================================================================================
 long _readVcc() {
