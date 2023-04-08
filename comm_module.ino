@@ -26,7 +26,7 @@ void comm_Setup() {
   while (!Serial) { ; }
   //..............................
 #ifdef DEBUG
-  Serial.println(">>> COMM:Setup");
+  Serial.println("COMM:Setup <<<");
 #endif
 #endif
 }
@@ -34,26 +34,13 @@ void comm_Setup() {
 //==================================================================================================
 void comm_ActIfActivity() {
 #ifdef UseCOMM
-  if (commProto.hasMessageInInboxThenReadMessage()) {
-    commProto.actOnMessage();
-    if (commProto.isHaveToPublish()) {
-      __actOnPartnerDataChanged();
-    }
-  }
+  // NO MESSAGES - I'm not listening
 #endif
 }
 //==================================================================================================
-void comm_actOnNewAction(/*const Action* action*/) {
+void comm_actOnNewData() {
 #ifdef UseCOMM
-  //currentActionCode = action->actionCode;
-
   commProto.actOnPollMessage();
-#endif
-}
-//==================================================================================================
-void __actOnPartnerDataChanged() {
-#ifdef UseCOMM
-  // new data came in
 #endif
 }
 //==================================================================================================
@@ -61,28 +48,31 @@ bool processReceivedMessage(const char* message) {
 #ifdef UseCOMM
   bool haveToPublish = false;
   //------------------------------------
-  byte newVentSpeed = message[0] - (byte)'0';
-  // ignore - the meat is in the action
-  //------------------------------------
-  byte newActionCode = message[1] - (byte)'0';
-  if (currentActionCode != newActionCode) {
-    if (newActionCode > 0) {
-      currentActionCode = newActionCode;
-      haveToPublish = true;
-    }
-  }
+  // NO LISTENING
   //------------------------------------
   return haveToPublish;
 #endif
 }
 //==================================================================================================
 const char* prepareMessageToSend() {
-#ifdef UseCOMM
-  char* message = new char[4];
-  memset(message, 0, 4);
-  //message[0] = currentVentSpeed + (byte)'0';
-  message[1] = currentActionCode + (byte)'0';
+  //commProto.purgeDataLine(2048, true);
 
+#ifdef UseCOMM
+  int CHAR_COUNT = 4;
+  int message_size = (CHAR_COUNT * ANALOG_PIN_COUNT) + 1;  // 33 bytes for 8 pins
+  char* message = new char[message_size];
+  memset(message, 0, message_size);
+  //Serial.println("");
+  for (byte pinId = 0; pinId < ANALOG_PIN_COUNT; pinId++) {
+    char voltage_string[CHAR_COUNT + 1];
+    sprintf(voltage_string, "%04d", voltage_avg[pinId]);
+    //Serial.print(voltage_string); Serial.print(" | ");
+    memcpy(&message[pinId * CHAR_COUNT], voltage_string, CHAR_COUNT);
+  }
+  //Serial.println("");
+#ifdef DEBUG
+  Serial.println(message);
+#endif
   return message;
 #endif
 }
