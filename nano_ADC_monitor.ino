@@ -80,7 +80,7 @@ void loop() {
   digitalWrite(LED_INDICATOR_PIN, LOW);
   //..............................
   //
-  _readAverageVoltagesOnAnalogPins(5);
+  _readAverageVoltagesOnAnalogPins(10);
   //
   comm_ActOnNewDataToSend();
   //..............................
@@ -125,7 +125,7 @@ void _readVoltagesOnAnalogPins() {
     voltage[pinId] = round(measured_voltage);
   }
 
-  _printAnalogPinData();
+  _printVoltageData();
 }
 //==================================================================================================
 float _computeVoltage(int raw_analog_value, int unit) {
@@ -143,7 +143,7 @@ float _computeVoltage(int raw_analog_value, int unit) {
 }
 //==================================================================================================
 //==================================================================================================
-void _printAnalogPinData() {
+void _printVoltageData() {
 #ifdef DEBUG_V
   Serial.println("");
   Serial.println("---------------------------------------");
