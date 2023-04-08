@@ -82,7 +82,7 @@ void loop() {
   //
   _readAverageVoltagesOnAnalogPins(5);
   //
-  comm_actOnNewData();
+  comm_ActOnNewDataToSend();
   //..............................
   digitalWrite(LED_INDICATOR_PIN, HIGH);
   //

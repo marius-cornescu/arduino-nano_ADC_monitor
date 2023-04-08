@@ -11,8 +11,6 @@ const char* prepareMessageToSend();
 //= VARIABLES ======================================================================================
 RtznCommProtocol commProto("NANO_ADC-WORKER", &processReceivedMessage, &prepareMessageToSend);
 
-byte currentActionCode = 0;
-
 //==================================================================================================
 //**************************************************************************************************
 void comm_Setup() {
@@ -32,26 +30,26 @@ void comm_Setup() {
 }
 //**************************************************************************************************
 //==================================================================================================
-void comm_ActIfActivity() {
+void comm_ActIfReceivedMessage() {
 #ifdef UseCOMM
   // NO MESSAGES - I'm not listening
 #endif
 }
 //==================================================================================================
-void comm_actOnNewData() {
+void comm_ActOnNewDataToSend() {
 #ifdef UseCOMM
   commProto.actOnPollMessage();
 #endif
 }
 //==================================================================================================
 bool processReceivedMessage(const char* message) {
-#ifdef UseCOMM
   bool haveToPublish = false;
+#ifdef UseCOMM
   //------------------------------------
   // NO LISTENING
   //------------------------------------
-  return haveToPublish;
 #endif
+  return haveToPublish;
 }
 //==================================================================================================
 const char* prepareMessageToSend() {
