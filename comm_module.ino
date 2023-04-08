@@ -66,7 +66,7 @@ bool processReceivedMessage(const char* message) {
   //------------------------------------
   byte newActionCode = message[1] - (byte)'0';
   if (currentActionCode != newActionCode) {
-    if (newActionCode > ACTION_NOP) {
+    if (newActionCode > 0) {
       currentActionCode = newActionCode;
       haveToPublish = true;
     }

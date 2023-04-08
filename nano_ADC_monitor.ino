@@ -66,7 +66,7 @@ void adc_Setup() {
     voltage[pinId] = 0;
   }
   //..............................
-  iot_Setup();
+  comm_Setup();
   //..............................
 #ifdef DEBUG
   Serial.println(">>> NANO-ADC:Setup");
