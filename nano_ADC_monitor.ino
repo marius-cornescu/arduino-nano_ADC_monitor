@@ -19,7 +19,7 @@
 #define SEC 1000  // 1 second
 
 #ifdef DEBUG
-#define TIME_TICK 100
+#define TIME_TICK 40
 #else
 #define TIME_TICK 10
 #endif
@@ -79,16 +79,16 @@ void adc_Setup() {
 //**************************************************************************************************
 //OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 void loop() {
-  digitalWrite(LED_INDICATOR_PIN, LOW);
+  digitalWrite(LED_INDICATOR_PIN, HIGH);
   //..............................
   //
-  _readAverageVoltagesOnAnalogPins(10);
+  _readAverageVoltagesOnAnalogPins(5);
   //
   comm_ActOnNewDataToSend();
   //..............................
-  digitalWrite(LED_INDICATOR_PIN, HIGH);
+  digitalWrite(LED_INDICATOR_PIN, LOW);
   //
-  delay(100 * TIME_TICK);
+  delay(200 * TIME_TICK);
 }
 //OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 //==================================================================================================
@@ -129,7 +129,7 @@ void _readVoltagesOnAnalogPins() {
   }
 }
 //==================================================================================================
-float _computeVoltage(int raw_analog_value, int unit) {
+float _computeVoltage(unsigned int raw_analog_value, int unit) {
   float raw_voltage = raw_analog_value * OPERATING_VOLTAGE / 1024.0;
   // read correct supply voltage
   long raw_vcc = _readVcc();

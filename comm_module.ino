@@ -28,6 +28,7 @@ void comm_Setup() {
 #ifdef DEBUG
   Serial.println("COMM:Setup <<<");
 #endif
+  delay(50 * TIME_TICK);
 #endif
 }
 //**************************************************************************************************
